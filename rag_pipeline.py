@@ -14,7 +14,7 @@ from pathlib import Path
 
 import anthropic
 import chromadb
-from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
+from chromadb.utils.embedding_functions import FastEmbedEmbeddingFunction
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from pypdf import PdfReader
 from dotenv import load_dotenv
@@ -22,14 +22,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 CHROMA_DIR = "./chroma_db"
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+EMBEDDING_MODEL = "BAAI/bge-small-en-v1.5"
 CHUNK_SIZE = 600
 CHUNK_OVERLAP = 100
 TOP_K = 5
 
 
 def _get_chroma_collection(collection_name: str):
-    embedding_fn = SentenceTransformerEmbeddingFunction(model_name=EMBEDDING_MODEL)
+    embedding_fn = FastEmbedEmbeddingFunction(model_name=EMBEDDING_MODEL)
     client = chromadb.PersistentClient(path=CHROMA_DIR)
     return client.get_or_create_collection(
         name=collection_name,
